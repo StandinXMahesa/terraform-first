@@ -8,16 +8,17 @@ terraform {
 }
 
 provider "google" {
-  project     = "fluted-mercury-412715"
-  region      = "us-central1"
-  credentials = "./keys/my-creds.json"
+  project     = var.project
+  region      = var.region
+  credentials = var.creadiatls
 }
 
 
 resource "google_storage_bucket" "demo-bucket" {
-  name          = "fluted-mercury-412715-terra-bucket"
-  location      = "US"
+  name          = var.gcs_bucket_name
+  location      = var.location
   force_destroy = true
+  storage_class = var.gcs_storage_class
 
 
   lifecycle_rule {
@@ -28,4 +29,11 @@ resource "google_storage_bucket" "demo-bucket" {
       type = "AbortIncompleteMultipartUpload"
     }
   }
+}
+
+
+
+resource "google_bigquery_dataset" "demo_dataset" {
+  dataset_id = var.bq_dataset_name
+  location   = var.location
 }
